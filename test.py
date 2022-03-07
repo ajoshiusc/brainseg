@@ -9,7 +9,6 @@ import torch.backends.cudnn as cudnn
 import torch.nn as nn
 from torch.utils.data import DataLoader
 from tqdm import tqdm
-from datasets.dataset_synapse import Synapse_dataset
 from utils import test_single_volume
 from networks.vit_seg_modeling import VisionTransformer as ViT_seg
 from networks.vit_seg_modeling import CONFIGS as CONFIGS_ViT_seg
@@ -18,7 +17,7 @@ parser = argparse.ArgumentParser()
 parser.add_argument('--volume_path', type=str,
                     default='../data/Synapse/test_vol_h5', help='root dir for validation volume data')  # for acdc volume_path=root_dir
 parser.add_argument('--dataset', type=str,
-                    default='Synapse', help='experiment_name')
+                    default='SkullScalp', help='experiment_name')
 parser.add_argument('--num_classes', type=int,
                     default=4, help='output channel of network')
 parser.add_argument('--list_dir', type=str,
@@ -32,7 +31,7 @@ parser.add_argument('--img_size', type=int, default=224, help='input patch size 
 parser.add_argument('--is_savenii', action="store_true", help='whether to save results during inference')
 
 parser.add_argument('--n_skip', type=int, default=3, help='using number of skip-connect, default is num')
-parser.add_argument('--vit_name', type=str, default='ViT-B_16', help='select one vit model')
+parser.add_argument('--vit_name', type=str, default='R50-ViT-B_16', help='select one vit model')
 
 parser.add_argument('--test_save_dir', type=str, default='../predictions', help='saving prediction as nii!')
 parser.add_argument('--deterministic', type=int,  default=1, help='whether use deterministic training')
@@ -78,10 +77,8 @@ if __name__ == "__main__":
     torch.cuda.manual_seed(args.seed)
 
     dataset_config = {
-        'Synapse': {
-            'Dataset': Synapse_dataset,
-            'volume_path': '../data/Synapse/test_vol_h5',
-            'list_dir': './lists/lists_Synapse',
+        'SkullScalp': {
+            'volume_path': './data/Synapse/test_vol_h5',
             'num_classes': 9,
             'z_spacing': 1,
         },
@@ -89,8 +86,6 @@ if __name__ == "__main__":
     dataset_name = args.dataset
     args.num_classes = dataset_config[dataset_name]['num_classes']
     args.volume_path = dataset_config[dataset_name]['volume_path']
-    args.Dataset = dataset_config[dataset_name]['Dataset']
-    args.list_dir = dataset_config[dataset_name]['list_dir']
     args.z_spacing = dataset_config[dataset_name]['z_spacing']
     args.is_pretrain = True
 
@@ -130,7 +125,7 @@ if __name__ == "__main__":
     logging.info(snapshot_name)
 
     if args.is_savenii:
-        args.test_save_dir = '../predictions'
+        args.test_save_dir = './predictions'
         test_save_path = os.path.join(args.test_save_dir, args.exp, snapshot_name)
         os.makedirs(test_save_path, exist_ok=True)
     else:
