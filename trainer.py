@@ -99,8 +99,8 @@ def trainer_synapse(args, model, snapshot_path):
                 labs1 = labs[1, ...].unsqueeze(0) * 30
                 writer.add_image('train/GroundTruth1', labs1, iter_num)
 
-        save_interval = 50  # int(max_epoch/6)
-        if epoch_num > int(max_epoch / 2) and (epoch_num + 1) % save_interval == 0:
+        #save_interval = 50  # int(max_epoch/6)
+        if 1: # save every epoch epoch_num > int(max_epoch / 2) and (epoch_num + 1) % save_interval == 0:
             save_mode_path = os.path.join(
                 snapshot_path, 'epoch_' + str(epoch_num) + '.pth')
             torch.save(model.state_dict(), save_mode_path)
