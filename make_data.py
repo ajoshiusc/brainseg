@@ -5,8 +5,9 @@ from scipy.ndimage import zoom
 import h5py
 import numpy as np
 
-mode='test'
-sub_mr_lst = glob.glob('/deneb_disk/headreco_out/'+mode+'/*_T1fs_conform.nii.gz')
+mode = 'train'
+sub_mr_lst = glob.glob('/deneb_disk/headreco_out/' +
+                       mode+'/*_T1fs_conform.nii.gz')
 
 patch_size = [256, 256]
 X = list()
@@ -18,8 +19,8 @@ for sub1 in tqdm(sub_mr_lst):
     mr = sub + '_T1fs_conform.nii.gz'
     lab = sub + '_masks_contr.nii.gz'
 
-    #print(mr)
-    #print(lab)
+    # print(mr)
+    # print(lab)
 
     mr_data = ni.load_img(mr).get_fdata()
     lab_data = ni.load_img(lab).get_fdata()

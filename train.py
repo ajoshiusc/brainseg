@@ -21,7 +21,7 @@ parser.add_argument('--max_iterations', type=int,
 parser.add_argument('--max_epochs', type=int,
                     default=150, help='maximum epoch number to train')
 parser.add_argument('--batch_size', type=int,
-                    default=16, help='batch_size per gpu')
+                    default=4, help='batch_size per gpu')
 parser.add_argument('--n_gpu', type=int, default=1, help='total gpu')
 parser.add_argument('--deterministic', type=int,  default=1,
                     help='whether use deterministic training')
@@ -55,7 +55,7 @@ if __name__ == "__main__":
     dataset_name = args.dataset
     dataset_config = {
         'SkullScalp': {
-            'root_path': '/ImagePTE1/ajoshi/data/hcp_data_skull_scalp/h5py/train_data.hdf5',
+            'root_path': '/deneb_disk/headreco_out/test.h5',
             'num_classes': 9,
         },
     }

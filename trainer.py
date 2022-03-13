@@ -60,7 +60,7 @@ def trainer_synapse(args, model, snapshot_path):
     for epoch_num in iterator:
         for i_batch, sampled_batch in enumerate(range(np.int16(len(trainloader.images)/args.batch_size))):
             image_batch, label_batch = trainloader.next_batch(args.batch_size)
-            image_batch = image_batch[:,:,:,0:1]
+            image_batch = image_batch[:,:,:,None]
             image_batch = torch.from_numpy(
                 image_batch).permute([0, 3, 1, 2]).to(torch.float)
             label_batch = torch.from_numpy(label_batch).permute([0, 3, 1, 2]).to(torch.float)
