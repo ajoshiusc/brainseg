@@ -12,6 +12,7 @@ from tqdm import tqdm
 from utils import test_single_nii
 from networks.vit_seg_modeling import VisionTransformer as ViT_seg
 from networks.vit_seg_modeling import CONFIGS as CONFIGS_ViT_seg
+import SimpleITK as sitk
 
 parser = argparse.ArgumentParser()
 parser.add_argument('--volume_path', type=str,
@@ -41,7 +42,20 @@ args = parser.parse_args()
 
 def inference(args, model, test_save_path=None):
     model.eval()
-    test_single_nii(args.volume_path, net, patch_size=[256, 256])
+
+    # run N4 bias field correction
+    inputImage = sitk.ReadImage(args.volume_path, sitk.sitkFloat32)
+    image = inputImage
+    maskImage = sitk.OtsuThreshold(inputImage, 0, 1, 200)
+    corrector = sitk.N4BiasFieldCorrectionImageFilter()
+    numberFittingLevels = 4
+    corrected_image = corrector.Execute(image, maskImage)
+    log_bias_field = corrector.GetLogBiasFieldAsImage(inputImage)
+    corrected_image_full_resolution = inputImage / sitk.Exp( log_bias_field )
+    sitk.WriteImage(corrected_image, 'input.bfc.nii.gz')
+
+
+    test_single_nii('input.bfc.nii.gz', net, patch_size=[256, 256])
 
 
 
@@ -61,7 +75,8 @@ if __name__ == "__main__":
     dataset_config = {
         'SkullScalp': {
             'Dataset': 'SkullScalp',
-            'volume_path': '/ImagePTE1/ajoshi/data/hcp_data_skull_scalp/test/118528/T1w/T1w_acpc_dc_restore.nii.gz', #'/home/ajoshi/Downloads/Fontan/sub-FP019/sub-FP019_ses-1_acq-acquired_T1w.nii.gz', #'/ImagePTE1/ajoshi/data/hcp_data_skull_scalp/test/115320/T1w/T1w_acpc_dc_restore.nii.gz',
+            #'volume_path': '/ImagePTE1/ajoshi/data/hcp_data_skull_scalp/test/118528/T1w/T1w_acpc_dc_restore.nii.gz', #
+            'volume_path': '/home/ajoshi/Downloads/Fontan/sub-FP019/sub-FP019_ses-1_acq-acquired_T1w.nii.gz', #'/ImagePTE1/ajoshi/data/hcp_data_skull_scalp/test/115320/T1w/T1w_acpc_dc_restore.nii.gz',
             'num_classes': 9,
             'z_spacing': 1,
         },
