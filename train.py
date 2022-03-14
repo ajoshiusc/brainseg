@@ -12,8 +12,8 @@ from trainer import trainer_synapse
 parser = argparse.ArgumentParser()
 #parser.add_argument('--root_path', type=str,
 #                    default='/ImagePTE1/ajoshi/data/DACN_Dataset/h5py/training_data.hdf5', help='root dir for data')
-parser.add_argument('--root_path', type=str,
-                    default='/deneb_disk/headreco_out/train.h5', help='root dir for data')
+#parser.add_argument('--root_path', type=str,
+#                    default='/deneb_disk/headreco_out/train.h5', help='root dir for data')
 
 parser.add_argument('--dataset', type=str,
                     default='SkullScalp', help='experiment_name')
@@ -58,7 +58,7 @@ if __name__ == "__main__":
     dataset_name = args.dataset
     dataset_config = {
         'SkullScalp': {
-            'root_path': '/deneb_disk/headreco_out/test.h5',
+            'root_path': '/ImagePTE1/ajoshi/data/headreco_out/train.h5',
             'num_classes': 9,
         },
     }
