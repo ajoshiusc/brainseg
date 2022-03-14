@@ -58,7 +58,7 @@ def trainer_synapse(args, model, snapshot_path):
     best_performance = 0.0
     iterator = tqdm(range(max_epoch), ncols=70)
     for epoch_num in iterator:
-        for i_batch, sampled_batch in enumerate(range(np.int16(len(trainloader.images)/args.batch_size))):
+        for i_batch, sampled_batch in enumerate(range(np.uint16(len(trainloader.images)/args.batch_size))):
             image_batch, label_batch = trainloader.next_batch(args.batch_size)
             image_batch = image_batch[:,:,:,None]
             image_batch = torch.from_numpy(
