@@ -58,7 +58,7 @@ if __name__ == "__main__":
     dataset_name = args.dataset
     dataset_config = {
         'SkullScalp': {
-            'root_path': '/deneb_disk/headreco_out/test.h5',
+            'root_path': '/deneb_disk/headreco_out/train.h5',
             'num_classes': 9,
         },
     }
