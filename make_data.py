@@ -5,7 +5,7 @@ from scipy.ndimage import zoom
 import h5py
 import numpy as np
 
-mode = 'train'
+mode = 'valid'
 sub_mr_lst = glob.glob('/deneb_disk/headreco_out/' +
                        mode+'/*_T1fs_conform.nii.gz')
 
@@ -30,7 +30,8 @@ for sub1 in tqdm(sub_mr_lst):
                      mr_data.shape[0], patch_size[1]/mr_data.shape[1]), order=3)
         labels = zoom(lab_data[:, :, i], (patch_size[0] /
                       mr_data.shape[0], patch_size[1]/mr_data.shape[1]), order=0)
-        X.append(slice)
+        slice[slice<0]=0
+        X.append(np.uint8(255.0*slice/slice.max()))
         Y.append(np.uint8(labels))
 
 
