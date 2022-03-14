@@ -70,7 +70,7 @@ if __name__ == "__main__":
     random.seed(args.seed)
     np.random.seed(args.seed)
     torch.manual_seed(args.seed)
-    torch.cuda.manual_seed(args.seed)
+    #torch.cuda.manual_seed(args.seed)
 
     dataset_config = {
         'SkullScalp': {
@@ -109,11 +109,11 @@ if __name__ == "__main__":
     config_vit.patches.size = (args.vit_patches_size, args.vit_patches_size)
     if args.vit_name.find('R50') !=-1:
         config_vit.patches.grid = (int(args.img_size/args.vit_patches_size), int(args.img_size/args.vit_patches_size))
-    net = ViT_seg(config_vit, img_size=args.img_size, num_classes=config_vit.n_classes).cuda()
+    net = ViT_seg(config_vit, img_size=args.img_size, num_classes=config_vit.n_classes)#.cuda()
 
-    snapshot = '/home/ajoshi/projects/brainseg/model/TU_SkullScalp256/TU_R50-ViT-B_16_skip3_epo150_bs4_256/epoch_0.pth' #os.path.join(snapshot_path, 'best_model.pth')
+    snapshot = '/home/ajoshi/projects/brainseg/model/TU_SkullScalp256/TU_R50-ViT-B_16_skip3_epo150_bs4_256/epoch_1.pth' #os.path.join(snapshot_path, 'best_model.pth')
     if not os.path.exists(snapshot): snapshot = snapshot.replace('best_model', 'epoch_'+str(args.max_epochs-1))
-    net.load_state_dict(torch.load(snapshot))
+    net.load_state_dict(torch.load(snapshot,map_location=torch.device('cpu')))
     snapshot_name = snapshot_path.split('/')[-1]
 
     log_folder = './test_log/test_log_' + args.exp
