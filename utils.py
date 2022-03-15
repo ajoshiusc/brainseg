@@ -150,6 +150,6 @@ def test_single_nii(nii_fname, net, patch_size=[256, 256]):
             prediction = out.cpu().detach().numpy()
     metric_list = []
 
-    v = new_img_like(nii_fname,prediction)
+    v = new_img_like(nii_fname,np.uint16(prediction))
     v.to_filename('predicted.nii.gz')
  
