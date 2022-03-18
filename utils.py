@@ -112,7 +112,7 @@ def test_single_volume(image, label, net, classes, patch_size=[256, 256], test_s
     return metric_list
 
 
-def test_single_nii(nii_fname, net, patch_size=[256, 256]):
+def test_single_nii(nii_fname, net, patch_size=[256, 256], output_fname='prediction.nii.gz'):
 
     image = load_img(nii_fname).get_fdata()
 
@@ -151,5 +151,5 @@ def test_single_nii(nii_fname, net, patch_size=[256, 256]):
     metric_list = []
 
     v = new_img_like(nii_fname,np.uint16(prediction))
-    v.to_filename('predicted.nii.gz')
+    v.to_filename(output_fname)
  

@@ -87,7 +87,7 @@ if __name__ == "__main__":
         config_vit.patches.grid = (int(args.img_size / args.vit_patches_size), int(args.img_size / args.vit_patches_size))
     net = ViT_seg(config_vit, img_size=args.img_size, num_classes=config_vit.n_classes).cuda()
     
-    #net.load_from(weights=np.load(config_vit.pretrained_path))
-
+    #net.load_from(weights=np.load('/ImagePTE1/ajoshi/code_farm/brainseg/model/TU_SkullScalp256/TU_R50-ViT-B_16_skip3_epo150_bs16_256/epoch_45.pth'))
+    net.load_state_dict(torch.load('/home/ajoshi/projects/brainseg/model/TU_SkullScalp256/TU_R50-ViT-B_16_skip3_epo150_bs4_256/epoch_25.pth'))
     trainer = {'SkullScalp': trainer_synapse,}
     trainer[dataset_name](args, net, snapshot_path)
