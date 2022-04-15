@@ -10,10 +10,6 @@ from networks.vit_seg_modeling import CONFIGS as CONFIGS_ViT_seg
 from trainer import trainer_synapse
 
 parser = argparse.ArgumentParser()
-#parser.add_argument('--root_path', type=str,
-#                    default='/ImagePTE1/ajoshi/data/DACN_Dataset/h5py/training_data.hdf5', help='root dir for data')
-#parser.add_argument('--root_path', type=str,
-#                    default='/deneb_disk/headreco_out/train.h5', help='root dir for data')
 
 parser.add_argument('--dataset', type=str,
                     default='SkullScalp', help='experiment_name')
