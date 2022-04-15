@@ -6,8 +6,8 @@ import h5py
 import numpy as np
 import os
 
-headreco_t1_dir = '/ImagePTE1/ajoshi/data/headreco_out_t1'
-headreco_t1t2_dir = '/ImagePTE1/ajoshi/data/headreco_out'
+headreco_t1_dir = '/project/ajoshi_27/headreco_out_t1'
+headreco_t1t2_dir = '/project/ajoshi_27/headreco_out'
 
 sub_dirs = glob.glob(headreco_t1t2_dir + '/m2m*')
 
@@ -59,7 +59,5 @@ with open("valid.txt", "w") as outfile:
 # This is how to read these files
 with open("train.txt",'r') as myfile:
     lst = myfile.read().splitlines()
-    print(lst)
 
 
-print(lst)

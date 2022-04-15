@@ -6,15 +6,13 @@ import h5py
 import numpy as np
 import os
 
-headreco_dir = '/ImagePTE1/ajoshi/headreco_out/'
+headreco_dir = '/project/ajoshi_27/headreco_out/'
 mode = 'train'
 out_h5file = mode+'_t1t2.h5'
 
 # Read the list of subjects
 with open(mode+'.txt', 'r') as myfile:
     sub_lst = myfile.read().splitlines()
-    print(sub_lst)
-
 
 patch_size = [256, 256]
 X = list()
