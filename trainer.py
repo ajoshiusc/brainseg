@@ -13,7 +13,7 @@ from torch.nn.modules.loss import CrossEntropyLoss
 from torch.utils.data import DataLoader
 from tqdm import tqdm
 from utils import DiceLoss
-from torchvision import transforms
+#from torchvision import transforms
 from data_reader import H5DataLoader
 
 
