@@ -7,7 +7,7 @@ import numpy as np
 import os
 
 headreco_dir = '/project/ajoshi_27/headreco_out_t1/'
-mode = 'valid'
+mode = 'train'
 out_h5file = mode+'_t1.h5'
 
 # Read the list of subjects
@@ -34,8 +34,15 @@ for subname in tqdm(sub_lst):
         labels = zoom(lab_data[:, :, i], (patch_size[0] /
                       mr_data.shape[0], patch_size[1]/mr_data.shape[1]), order=0)
         slice[slice < 0] = 0
+
+        if np.max(np.uint8(labels))>8 or np.min(np.uint8(labels))<0:
+            print('Bad Label, skipping')
+            continue
+
         X.append(np.uint8(255.0*slice/slice.max()))
         Y.append(np.uint8(labels))
+
+
 
 
 hf = h5py.File(out_h5file, 'w')
