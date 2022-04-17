@@ -7,7 +7,7 @@ import numpy as np
 import os
 
 headreco_dir = '/project/ajoshi_27/headreco_out_t1/'
-mode = 'train'
+mode = 'valid'
 out_h5file = mode+'_t1.h5'
 
 # Read the list of subjects
