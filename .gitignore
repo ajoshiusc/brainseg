@@ -1,6 +1,11 @@
 *.pth
 *.nii*
 events*
+*.h5
+*.out
+train.txt
+test.txt
+valid.txt
 log.txt
 TU_pretrain*
 launch.json*

@@ -15,6 +15,10 @@ from tqdm import tqdm
 from utils import DiceLoss
 #from torchvision import transforms
 from data_reader import H5DataLoader
+import torch.nn.functional as F
+from losses import BCE,GCE,SCE
+
+
 
 
 def trainer_synapse(args, model, snapshot_path):
@@ -44,7 +48,17 @@ def trainer_synapse(args, model, snapshot_path):
     if args.n_gpu > 1:
         model = nn.DataParallel(model)
     model.train()
-    ce_loss = CrossEntropyLoss()
+
+    if args.loss == 'SCE':
+        ce_loss = SCE(args.num_classes,args.device, beta=args.beta)
+    elif args.loss == 'GCE':
+        ce_loss = GCE(args.num_classes, args.device, q=args.beta)
+    elif args.loss == 'BCE':
+        ce_loss = BCE(args.num_classes, args.device, beta=args.beta)
+    else:
+        ce_loss = nn.CrossEntropyLoss()
+
+
     dice_loss = DiceLoss(num_classes)
     optimizer = optim.SGD(model.parameters(), lr=base_lr,
                           momentum=0.9, weight_decay=0.0001)

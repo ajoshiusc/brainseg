@@ -12,7 +12,7 @@ from trainer import trainer_synapse
 parser = argparse.ArgumentParser()
 
 parser.add_argument('--dataset', type=str,
-                    default='SkullScalp_t1', help='experiment_name')
+                    default='SkullScalp_t1t2', help='experiment_name')
 parser.add_argument('--num_classes', type=int,
                     default=9, help='output channel of network')
 parser.add_argument('--max_iterations', type=int,
@@ -53,15 +53,15 @@ if __name__ == "__main__":
     torch.cuda.manual_seed(args.seed)
     dataset_name = args.dataset
     dataset_config = {
-        'SkullScalp_t1': {
-            'root_path': 'train_t1.h5',
+        'SkullScalp_t1t2': {
+            'root_path': 'train_t1t2.h5',
             'num_classes': 9,
         },
     }
     args.num_classes = dataset_config[dataset_name]['num_classes']
     args.root_path = dataset_config[dataset_name]['root_path']
     args.is_pretrain = False
-    args.exp = 'T1_' + dataset_name + str(args.img_size)
+    args.exp = 'T1T2_' + dataset_name + str(args.img_size)
     snapshot_path = "./model/{}/{}".format(args.exp, 'TU')
     snapshot_path = snapshot_path + '_pretrain' if args.is_pretrain else snapshot_path
     snapshot_path += '_' + args.vit_name
@@ -85,5 +85,5 @@ if __name__ == "__main__":
     
     #net.load_from(weights=np.load(config_vit.pretrained_path))
 
-    trainer = {'SkullScalp_t1': trainer_synapse,}
+    trainer = {'SkullScalp_t1t2': trainer_synapse,}
     trainer[dataset_name](args, net, snapshot_path)
