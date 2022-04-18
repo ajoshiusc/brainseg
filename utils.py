@@ -154,7 +154,27 @@ def test_single_nii(nii_fname, net, patch_size=[256, 256], output_fname='predict
     v.to_filename(output_fname)
  
 
- def test_single_nii_eval(nii_fname, label, net, patch_size=[256, 256], output_fname='prediction.nii.gz'):
+
+def test_images(images, net, patch_size=[256, 256]):
+
+    prediction = np.zeros_like(images)
+    for ind in tqdm(range(images.shape[0])):
+        slice = images[ind, :, :]
+        input = torch.from_numpy(slice).unsqueeze(
+            0).unsqueeze(0).float().cuda()
+        net.eval()
+        with torch.no_grad():
+            outputs = net(input)
+            out = torch.argmax(torch.softmax(
+                outputs, dim=1), dim=1).squeeze(0)
+            out = out.cpu().detach().numpy()
+            prediction[ind, :,:] = out
+
+    return prediction
+
+
+
+def test_single_nii_eval(nii_fname, label, net, patch_size=[256, 256], output_fname='prediction.nii.gz'):
 
     image = load_img(nii_fname).get_fdata()
 
