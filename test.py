@@ -75,9 +75,10 @@ if __name__ == "__main__":
     dataset_config = {
         'SkullScalp': {
             'Dataset': 'SkullScalp',
-            #'volume_path': '/ImagePTE1/ajoshi/data/hcp_data_skull_scalp/test/118528/T1w/T1w_acpc_dc_restore.nii.gz', #
+            'volume_path': '/ImagePTE1/ajoshi/data/hcp_data_skull_scalp/test/118528/T1w/T1w_acpc_dc_restore.nii.gz', #
             #'volume_path': '/home/ajoshi/Downloads/Fontan/sub-FP019/sub-FP019_ses-1_acq-acquired_T1w.nii.gz', #'/ImagePTE1/ajoshi/data/hcp_data_skull_scalp/test/115320/T1w/T1w_acpc_dc_restore.nii.gz',
-            'volume_path': '/home/ajoshi/Downloads/Low_field/3ttop55t/3T_0.55T_MPRAGE/V1_LF_2nd_MPRAGE.nii.gz',
+            # 'volume_path': '/home/ajoshi/Downloads/Low_field/3ttop55t/3T_0.55T_MPRAGE/V1_LF_2nd_MPRAGE.nii.gz',
+
             'num_classes': 9,
             'z_spacing': 1,
         },
