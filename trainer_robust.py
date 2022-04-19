@@ -50,7 +50,7 @@ def trainer_synapse(args, model, snapshot_path):
     model.train()
 
     if args.loss == 'SCE':
-        ce_loss = SCE(args.num_classes,args.device, beta=args.beta)
+        ce_loss = SCE(args.num_classes, args.device, beta=args.beta)
     elif args.loss == 'GCE':
         ce_loss = GCE(args.num_classes, args.device, q=args.beta)
     elif args.loss == 'BCE':
@@ -121,6 +121,7 @@ def trainer_synapse(args, model, snapshot_path):
             logging.info("save model to {}".format(save_mode_path))
 
         if epoch_num >= max_epoch - 1:
+
             save_mode_path = os.path.join(
                 snapshot_path, 'epoch_' + str(epoch_num) + '.pth')
             torch.save(model.state_dict(), save_mode_path)

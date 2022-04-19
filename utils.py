@@ -169,7 +169,6 @@ def test_images(images, net, patch_size=[256, 256]):
                 outputs, dim=1), dim=1).squeeze(0)
             out = out.cpu().detach().numpy()
             prediction[ind, :,:] = out
-
     return prediction
 
 
