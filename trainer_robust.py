@@ -50,7 +50,7 @@ def trainer_synapse(args, model, snapshot_path):
     model.train()
 
     if args.loss == 'SCE':
-        ce_loss = SCE(args.num_classes,args.device, beta=args.beta)
+        ce_loss = SCE(args.num_classes, args.device, beta=args.beta)
     elif args.loss == 'GCE':
         ce_loss = GCE(args.num_classes, args.device, q=args.beta)
     elif args.loss == 'BCE':
@@ -84,7 +84,7 @@ def trainer_synapse(args, model, snapshot_path):
             image_batch, label_batch = image_batch.cuda(), label_batch.cuda()
             outputs = model(image_batch)
             labs = torch.argmax(label_batch, dim=1, keepdim=False)
-            loss_ce = ce_loss(outputs, labs)
+            : = ce_loss(outputs, labs)
             loss_dice = dice_loss(outputs, labs, softmax=True)
             loss = 0.5 * loss_ce + 0.5 * loss_dice
             optimizer.zero_grad()
