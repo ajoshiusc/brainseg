@@ -26,9 +26,10 @@ if __name__ == "__main__":
     n_skip = 3
     img_size = 256
     vit_patches_size = 16    
-    snapshot = '/project/ajoshi_27/code_farm/brainseg/model/T1T2_SkullScalp_t1t2256/TU_R50-ViT-B_16_skip3_30k_epo150_bs16_256/epoch_0.pth' #os.path.join(snapshot_path, 'best_model.pth')
-    test_data_file = 'test_t1t2.h5'
-    output_file = 'test_t1t2_output.h5'
+    snapshot = '/project/ajoshi_27/code_farm/brainseg/model/T1_SkullScalp_t1256/TU_R50-ViT-B_16_skip3_30k_epo150_bs16_256/epoch_8.pth'
+    #snapshot = '/project/ajoshi_27/code_farm/brainseg/model/T1T2_SkullScalp_t1t2256/TU_R50-ViT-B_16_skip3_30k_epo150_bs16_256/epoch_10.pth' #os.path.join(snapshot_path, 'best_model.pth')
+    test_data_file = 'test_t1.h5'
+    output_file = 'test_t1_output.h5'
 
     cudnn.benchmark = True
     cudnn.deterministic = False
@@ -57,7 +58,7 @@ if __name__ == "__main__":
     predictions = test_images(db_loader.images, net)
     
     hf = h5py.File(output_file, 'w')
-    hf.create_dataset('pred', data=predictions)
+    hf.create_dataset('Y', data=predictions)
     hf.close()
 
 

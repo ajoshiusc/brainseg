@@ -57,7 +57,7 @@ def calculate_metric_percase(pred, gt):
     elif pred.sum() > 0 and gt.sum() == 0:
         return 1, 0
     else:
-        return 0, 0
+        return np.nan, 0
 
 
 def test_single_volume(image, label, net, classes, patch_size=[256, 256], test_save_path=None, case=None, z_spacing=1):
