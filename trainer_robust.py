@@ -84,7 +84,7 @@ def trainer_synapse(args, model, snapshot_path):
             image_batch, label_batch = image_batch.cuda(), label_batch.cuda()
             outputs = model(image_batch)
             labs = torch.argmax(label_batch, dim=1, keepdim=False)
-            : = ce_loss(outputs, labs)
+            loss_ce = ce_loss(outputs, labs)
             loss_dice = dice_loss(outputs, labs, softmax=True)
             loss = 0.5 * loss_ce + 0.5 * loss_dice
             optimizer.zero_grad()
