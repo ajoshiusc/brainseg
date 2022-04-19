@@ -6,7 +6,7 @@ import h5py
 
 data_file = 'test_t1t2.h5'
 
-predictions_file = 'test_t1_output.h5'
+predictions_file = 'test_t1t2_output.h5'
 #predictions_file = 'test_t1.h5'
 
 
@@ -20,7 +20,7 @@ dice_coeffs = np.zeros([num_imgs,num_classes])
 hausdorff_dist = np.zeros([num_imgs,num_classes])
 
 
-for i in tqdm(range(num_imgs)):
+for i in range(num_imgs):
 
     metric_list = []
     for lid in range(num_classes):
