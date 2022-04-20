@@ -127,7 +127,7 @@ def test_single_nii(nii_fname, net, patch_size=[256, 256], output_fname='predict
                 slice = zoom(
                     slice, (patch_size[0] / x, patch_size[1] / y), order=3)
             input = torch.from_numpy(slice).unsqueeze(
-                0).unsqueeze(0).float()#.cuda()
+                0).unsqueeze(0).float().cuda()
             net.eval()
             with torch.no_grad():
                 outputs = net(input)
@@ -142,7 +142,7 @@ def test_single_nii(nii_fname, net, patch_size=[256, 256], output_fname='predict
                 prediction[:,:,ind] = pred
     else:
         input = torch.from_numpy(image).unsqueeze(
-            0).unsqueeze(0).float() #.cuda()
+            0).unsqueeze(0).float().cuda()
         net.eval()
         with torch.no_grad():
             out = torch.argmax(torch.softmax(
