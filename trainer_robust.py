@@ -18,6 +18,7 @@ from utils import DiceLoss
 from data_reader import H5DataLoader
 import torch.nn.functional as F
 from losses import BCE,GCE,SCE
+import pdb
 
 
 
@@ -92,8 +93,13 @@ def trainer_synapse(args, model, snapshot_path):
             image_batch, label_batch = image_batch.cuda(), label_batch.cuda()
             outputs = model(image_batch)
             labs = torch.argmax(label_batch, dim=1, keepdim=False)
+            
+            # class_weights = 1 - torch.unique(labs, return_counts=True)[1] / (labs.shape[0]*labs.shape[1]*labs.shape[2])
+            # if class_weights.size(0) < 9:
+            #     pdb.set_trace()
+            
             loss_ce = ce_loss(outputs, labs)
-            loss_dice = dice_loss(outputs, labs, softmax=True)
+            loss_dice = dice_loss(outputs, labs, weight=args.class_weight, softmax=True)
             loss = 0.5 * loss_ce + 0.5 * loss_dice
             optimizer.zero_grad()
             loss.backward()

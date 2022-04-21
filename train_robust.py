@@ -45,6 +45,7 @@ parser.add_argument(
     )
 parser.add_argument('--warmup', type=int, default=0, help='warmup phase, use cross entropy first before robust loss')
 parser.add_argument('--resume', type=int, default=0, help='resume from epoch')
+parser.add_argument('--class_weight', type=int, default=None, help='use class weight or not')
 
 args = parser.parse_args()
 
@@ -63,7 +64,7 @@ if __name__ == "__main__":
     dataset_name = args.dataset
     dataset_config = {
         'SkullScalp_t1': {
-            'root_path': '/project/ajoshi_27/code_farm/brainseg/train_t1.h5',
+            'root_path': '/home/wenhuicu/brainseg/train_t1.h5',
             'num_classes': 9,
         },
     }
