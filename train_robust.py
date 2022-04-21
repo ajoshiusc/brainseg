@@ -66,7 +66,7 @@ if __name__ == "__main__":
     dataset_name = args.dataset
     dataset_config = {
         'SkullScalp_t1': {
-            'root_path': '/project/ajoshi_27/code_farm/brainseg/train_t1.h5',
+            'root_path': '/home/wenhuicu/brainseg/train_t1.h5',
             'num_classes': 9,
         },
     }

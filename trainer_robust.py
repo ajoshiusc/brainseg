@@ -17,7 +17,11 @@ from utils import DiceLoss
 #from torchvision import transforms
 from data_reader import H5DataLoader
 import torch.nn.functional as F
+<<<<<<< HEAD
 from losses import BCE,GCE,SCE
+=======
+from losses import BCE,GCE,SCE, BCE_Weighted
+>>>>>>> 32376f6b8e6ff2c6fa17969062471b68fa1b95c8
 import pdb
 
 
@@ -88,19 +92,29 @@ def trainer_synapse(args, model, snapshot_path):
             outputs = model(image_batch)
             labs = torch.argmax(label_batch, dim=1, keepdim=False)
             
-            labs_onehot = torch.nn.functional.one_hot(torch.squeeze(labs), args.num_classes).float()
-            tmp = labs_onehot.permute((0, 2, 3, 1))
-            class_weights = 1 - (torch.sum(tmp.reshape((-1, 9)), axis=0) / (labs.shape[0]*labs.shape[1]*labs.shape[2]))
-            # class_weights = 1 - torch.unique(labs_onehot, return_counts=True)[1] / (labs.shape[0]*labs.shape[1]*labs.shape[2])
+            class_weights = None
+            if args.class_weight is not None:
+                labs_onehot = torch.nn.functional.one_hot(torch.squeeze(labs), args.num_classes).float()
+                tmp = labs_onehot.permute((0, 2, 3, 1))
+                class_weights = 1 - (torch.sum(tmp.reshape((-1, 9)), axis=0) / (labs.shape[0]*labs.shape[1]*labs.shape[2]))
+                
             # if class_weights.size(0) < 9:
             #     pdb.set_trace()
             if epoch_num < args.warmup:
                 ce_loss = nn.CrossEntropyLoss(weight=class_weights)
             else:
                 ce_loss = robust_loss
+<<<<<<< HEAD
 
             loss_ce = ce_loss(outputs, labs)
             loss_dice = dice_loss(outputs, labs, weight=args.class_weight, softmax=True)
+=======
+                if args.class_weight is not None:
+                    ce_loss = BCE_Weighted(args.num_classes, args.device, beta=args.beta, weights=class_weights)
+
+            loss_ce = ce_loss(outputs, labs)
+            loss_dice = dice_loss(outputs, labs, weight=class_weights, softmax=True)
+>>>>>>> 32376f6b8e6ff2c6fa17969062471b68fa1b95c8
             loss = 0.5 * loss_ce + 0.5 * loss_dice
             optimizer.zero_grad()
             loss.backward()

@@ -27,9 +27,11 @@ if __name__ == "__main__":
     img_size = 256
     vit_patches_size = 16    
     #snapshot = '/project/ajoshi_27/code_farm/brainseg/model/T1_SkullScalp_t1256/TU_R50-ViT-B_16_skip3_30k_epo150_bs16_256/epoch_10.pth'
-    snapshot = '/project/ajoshi_27/code_farm/brainseg/model/T1T2_SkullScalp_t1t2256/TU_R50-ViT-B_16_skip3_30k_epo150_bs16_256/epoch_10.pth' #os.path.join(snapshot_path, 'best_model.pth')
+    #snapshot = '/project/ajoshi_27/code_farm/brainseg/model/T1T2_SkullScalp_t1t2256/TU_R50-ViT-B_16_skip3_30k_epo150_bs16_256/epoch_10.pth' #os.path.join(snapshot_path, 'best_model.pth')
+    snapshot = '/home1/ajoshi/epoch_10.pth'
+
     test_data_file = 'test_t1t2.h5'
-    output_file = 'test_t1t2_output.h5'
+    output_file = 'test_robust_output.h5'
 
     cudnn.benchmark = True
     cudnn.deterministic = False
@@ -50,7 +52,7 @@ if __name__ == "__main__":
     net = ViT_seg(config_vit, img_size=img_size, num_classes=config_vit.n_classes).cuda()
 
 
-    net.load_state_dict(torch.load(snapshot,map_location=torch.device('cuda')))
+    net.load_state_dict(torch.jit.load(snapshot,map_location=torch.device('cuda')))
 
     db_loader = H5DataLoader(test_data_file)
 
