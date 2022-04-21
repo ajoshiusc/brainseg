@@ -50,10 +50,13 @@ if __name__ == "__main__":
     n_skip = 3
     img_size = 256
     vit_patches_size = 16    
-    snapshot = '/project/ajoshi_27/code_farm/brainseg/model/T1_SkullScalp_t1256/TU_R50-ViT-B_16_skip3_30k_epo150_bs16_256/epoch_10.pth'
+    #snapshot = '/project/ajoshi_27/code_farm/brainseg/model/T1_SkullScalp_t1256/TU_R50-ViT-B_16_skip3_30k_epo150_bs16_256/epoch_10.pth'
     #snapshot = '/project/ajoshi_27/code_farm/brainseg/model/T1T2_SkullScalp_t1t2256/TU_R50-ViT-B_16_skip3_30k_epo150_bs16_256/epoch_10.pth' #os.path.join(snapshot_path, 'best_model.pth')
+    #snapshot = '/scratch1/wenhuicu/brainseg/model/T1_SkullScalp_t1256/TU_R50-ViT-B_16_skip3_30k_epo150_bs16_256_BCE_beta_0.0001_warmup_2/epoch_10.pth'
+    snapshot = '/home1/ajoshi/epoch_10.pth'
+
     input_nii = '/project/ajoshi_27/headreco_out/m2m_sub-CC110033/T1fs_conform.nii.gz'
-    output_file = 'm2m_sub-CC110033.label.nii.gz'
+    output_file = 'm2m_sub-CC110033_robust.label.nii.gz'
 
     cudnn.benchmark = True
     cudnn.deterministic = False
