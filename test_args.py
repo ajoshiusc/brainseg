@@ -65,7 +65,7 @@ if __name__ == "__main__":
     net = ViT_seg(config_vit, img_size=img_size, num_classes=config_vit.n_classes).cuda()
 
 
-    net.load_state_dict(torch.load(snapshot,map_location=torch.device('cuda')))
+    net.load_state_dict(torch.load(snapshot, map_location=torch.device('cuda')))
 
     db_loader = H5DataLoader(test_data_file)
 

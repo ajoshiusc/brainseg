@@ -45,6 +45,9 @@ parser.add_argument(
     )
 parser.add_argument('--warmup', type=int, default=0, help='warmup phase, use cross entropy first before robust loss')
 parser.add_argument('--resume', type=int, default=0, help='resume from epoch')
+parser.add_argument('--class_weight', type=int, default=None, help='use class weight or not')
+parser.add_argument('--suffix', type=str,
+                    default='', help='suffix name')
 
 args = parser.parse_args()
 
@@ -84,10 +87,11 @@ if __name__ == "__main__":
     snapshot_path = snapshot_path + '_lr' + str(args.base_lr) if args.base_lr != 0.01 else snapshot_path
     snapshot_path = snapshot_path + '_' + str(args.img_size)
     snapshot_path = snapshot_path + '_s' + str(args.seed) if args.seed != 1234 else snapshot_path
-    snapshot_path = snapshot_path + '_'+args.loss
+    snapshot_path = snapshot_path + '_'+ args.loss
     snapshot_path = snapshot_path + '_beta_' + str(args.beta)
     if args.warmup > 0:
         snapshot_path = snapshot_path + '_warmup_' + str(args.warmup)
+    snapshot_path = snapshot_path + args.suffix
 
     if not os.path.exists(snapshot_path):
         os.makedirs(snapshot_path)
