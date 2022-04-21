@@ -17,9 +17,8 @@ from utils import DiceLoss
 #from torchvision import transforms
 from data_reader import H5DataLoader
 import torch.nn.functional as F
-from losses import BCE,GCE,SCE
+from losses import BCE,GCE,SCE, BCE_Weighted
 import pdb
-
 
 
 
@@ -76,11 +75,6 @@ def trainer_synapse(args, model, snapshot_path):
     robust_loss = copy.deepcopy(ce_loss)
     
     for epoch_num in iterator:
-        if epoch_num < args.warmup:
-            ce_loss = nn.CrossEntropyLoss()
-        else:
-            ce_loss = robust_loss
-
         for i_batch, sampled_batch in enumerate(range(np.uint16(len(trainloader.images)/args.batch_size))):
             image_batch, label_batch = trainloader.next_batch(args.batch_size)
             image_batch = image_batch[:,:,:,None]
@@ -94,12 +88,21 @@ def trainer_synapse(args, model, snapshot_path):
             outputs = model(image_batch)
             labs = torch.argmax(label_batch, dim=1, keepdim=False)
             
-            # class_weights = 1 - torch.unique(labs, return_counts=True)[1] / (labs.shape[0]*labs.shape[1]*labs.shape[2])
+            class_weights = None
+            if args.class_weight is not None:
+                class_weights = 1 - torch.unique(labs, return_counts=True)[1] / (labs.shape[0]*labs.shape[1]*labs.shape[2])
+                
             # if class_weights.size(0) < 9:
             #     pdb.set_trace()
-            
+            if epoch_num < args.warmup:
+                ce_loss = nn.CrossEntropyLoss(weight=class_weights)
+            else:
+                ce_loss = robust_loss
+                if args.class_weight is not None:
+                    ce_loss = BCE_Weighted(args.num_classes, args.device, beta=args.beta, weights=class_weights)
+
             loss_ce = ce_loss(outputs, labs)
-            loss_dice = dice_loss(outputs, labs, weight=args.class_weight, softmax=True)
+            loss_dice = dice_loss(outputs, labs, weight=class_weights, softmax=True)
             loss = 0.5 * loss_ce + 0.5 * loss_dice
             optimizer.zero_grad()
             loss.backward()

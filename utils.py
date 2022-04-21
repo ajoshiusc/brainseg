@@ -34,14 +34,14 @@ class DiceLoss(nn.Module):
     def forward(self, inputs, target, weight=None, softmax=False):
         if softmax:
             inputs = torch.softmax(inputs, dim=1)
-        total_voxels = target.flatten().shape[0]
+        # total_voxels = target.flatten().shape[0]
         target = self._one_hot_encoder(target)
         
         if weight is None:
             weight = [1] * self.n_classes
-        else:
-            tmp = target.permute((0, 2, 3, 1))
-            weight = 1 - (torch.sum(tmp.reshape((-1, 9)), axis=0) / total_voxels)
+        # else:
+        #     tmp = target.permute((0, 2, 3, 1))
+        #     weight = 1 - (torch.sum(tmp.reshape((-1, 9)), axis=0) / total_voxels)
             
         assert inputs.size() == target.size(
         ), 'predict {} & target {} shape do not match'.format(inputs.size(), target.size())
