@@ -24,7 +24,7 @@ test = h5py.File(data_file, 'r')['Y']
 pred = h5py.File(predictions_file, 'r')['Y']
 
 num_classes = 9
-num_imgs = 1000#test.shape[0]
+num_imgs = test.shape[0]
 dice_coeffs = np.zeros([num_imgs,num_classes])
 hausdorff_dist = np.zeros([num_imgs,num_classes])
 
