@@ -3,7 +3,7 @@
 #SBATCH --ntasks=1
 #SBATCH --cpus-per-task=8
 #SBATCH --mem=64GB
-#SBATCH --time=20:00:00
+#SBATCH --time=1:00:00
 #SBATCH --partition=gpu
 #SBATCH --gres=gpu:1
 #SBATCH --account=ajoshi_27
@@ -12,4 +12,4 @@ module purge
 module load nvidia-hpc-sdk
 module load gcc/8.3.0
 
-python /scratch1/wenhuicu/brainseg/train_robust.py --loss='BCE' --beta=0.001 --warmup=2
+python /scratch1/wenhuicu/brainseg/test_args.py --loss='BCE' --beta='0.001' --warmup=2

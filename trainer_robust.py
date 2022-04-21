@@ -1,6 +1,7 @@
 import argparse
 import logging
 import os
+import copy
 import random
 import sys
 import time
@@ -71,7 +72,14 @@ def trainer_synapse(args, model, snapshot_path):
         len(trainloader.images)/args.batch_size, max_iterations))
     best_performance = 0.0
     iterator = tqdm(range(max_epoch), ncols=70)
+    robust_loss = copy.deepcopy(ce_loss)
+    
     for epoch_num in iterator:
+        if epoch_num < args.warmup:
+            ce_loss = nn.CrossEntropyLoss()
+        else:
+            ce_loss = robust_loss
+
         for i_batch, sampled_batch in enumerate(range(np.uint16(len(trainloader.images)/args.batch_size))):
             image_batch, label_batch = trainloader.next_batch(args.batch_size)
             image_batch = image_batch[:,:,:,None]
@@ -115,6 +123,8 @@ def trainer_synapse(args, model, snapshot_path):
 
         #save_interval = 50  # int(max_epoch/6)
         if 1: # save every epoch epoch_num > int(max_epoch / 2) and (epoch_num + 1) % save_interval == 0:
+            if args.resume > 0:
+                epoch_num = epoch_num + args.resume + 1
             save_mode_path = os.path.join(
                 snapshot_path, 'epoch_' + str(epoch_num) + '.pth')
             torch.save(model.state_dict(), save_mode_path)
