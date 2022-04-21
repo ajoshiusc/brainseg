@@ -37,12 +37,15 @@ parser.add_argument('--vit_name', type=str,
 parser.add_argument('--vit_patches_size', type=int,
                     default=16, help='vit_patches_size, default is 16')
 parser.add_argument('--loss', type=str,
-                    default='GCE', help='loss fuction for the expriment CE,GCE,SCE,BCE')
+                    default='BCE', help='loss fuction for the expriment CE,GCE,SCE,BCE')
 parser.add_argument('--beta', type=float, default=0.01,
                     help='robust loss parameter')
 parser.add_argument(
         "--device", required=False, default="cuda" if torch.cuda.is_available() else "cpu"
     )
+parser.add_argument('--warmup', type=int, default=0, help='warmup phase, use cross entropy first before robust loss')
+parser.add_argument('--resume', type=int, default=0, help='resume from epoch')
+parser.add_argument('--class_weight', type=int, default=None, help='use class weight or not')
 
 args = parser.parse_args()
 
@@ -61,7 +64,7 @@ if __name__ == "__main__":
     dataset_name = args.dataset
     dataset_config = {
         'SkullScalp_t1': {
-            'root_path': '/project/ajoshi_27/code_farm/brainseg/train_t1.h5',
+            'root_path': '/home/wenhuicu/brainseg/train_t1.h5',
             'num_classes': 9,
         },
     }
@@ -84,6 +87,8 @@ if __name__ == "__main__":
     snapshot_path = snapshot_path + '_s' + str(args.seed) if args.seed != 1234 else snapshot_path
     snapshot_path = snapshot_path + '_'+args.loss
     snapshot_path = snapshot_path + '_beta_' + str(args.beta)
+    if args.warmup > 0:
+        snapshot_path = snapshot_path + '_warmup_' + str(args.warmup)
 
     if not os.path.exists(snapshot_path):
         os.makedirs(snapshot_path)
@@ -96,6 +101,8 @@ if __name__ == "__main__":
     net = ViT_seg(config_vit, img_size=args.img_size, num_classes=config_vit.n_classes).cuda()
 
     # net.load_from(weights=np.load(config_vit.pretrained_path))
+    if args.resume:
+        net.load_state_dict(torch.load(snapshot_path + '/epoch_' + str(args.resume) + '.pth'))
 
     trainer = {'SkullScalp_t1': trainer_synapse, }
     trainer[dataset_name](args, net, snapshot_path)

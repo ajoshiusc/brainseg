@@ -1,12 +1,21 @@
+import argparse
 import numpy as np
 from tqdm import tqdm
 from utils import test_images, test_single_nii, calculate_metric_percase
 from data_reader import H5DataLoader
 import h5py
 
-data_file = 'test_t1t2.h5'
+parser = argparse.ArgumentParser()
 
-predictions_file = 'test_t1_output.h5'
+parser.add_argument('--name', type=str, default='BCE1',
+                    help='ss')
+
+
+args = parser.parse_args()
+
+data_file = '/project/ajoshi_27/code_farm/brainseg/test_t1t2.h5'
+
+predictions_file = '/scratch1/wenhuicu/brainseg/test_t1_output_' + args.name + '.h5'
 #predictions_file = 'test_t1.h5'
 
 
@@ -26,12 +35,8 @@ for i in tqdm(range(num_imgs)):
     for lid in range(num_classes):
         dice_coeffs[i,lid], hausdorff_dist[i,lid] = calculate_metric_percase(test[i] == lid, pred[i] == lid)
 
-
-print('Dice mean: ', np.nanmean(dice_coeffs,axis=0))
-print('Dice std: ', np.nanstd(dice_coeffs,axis=0))
-
-print('Hausdorff mean: ', np.nanmean(hausdorff_dist,axis=0))
-print('Hausdorff std: ', np.nanstd(hausdorff_dist,axis=0))
+print(args.name)
+print(np.nanmean(dice_coeffs,axis=0), np.nanstd(dice_coeffs,axis=0))
 
 
     

@@ -6,6 +6,7 @@ import torch.nn as nn
 import SimpleITK as sitk
 from nilearn.image import load_img, new_img_like
 from tqdm import tqdm
+import pdb
 
 class DiceLoss(nn.Module):
     def __init__(self, n_classes):
@@ -33,9 +34,15 @@ class DiceLoss(nn.Module):
     def forward(self, inputs, target, weight=None, softmax=False):
         if softmax:
             inputs = torch.softmax(inputs, dim=1)
+        total_voxels = target.flatten().shape[0]
         target = self._one_hot_encoder(target)
+        
         if weight is None:
             weight = [1] * self.n_classes
+        else:
+            tmp = target.permute((0, 2, 3, 1))
+            weight = 1 - (torch.sum(tmp.reshape((-1, 9)), axis=0) / total_voxels)
+            
         assert inputs.size() == target.size(
         ), 'predict {} & target {} shape do not match'.format(inputs.size(), target.size())
         class_wise_dice = []
@@ -171,51 +178,3 @@ def test_images(images, net, patch_size=[256, 256]):
             prediction[ind, :,:] = out
     return prediction
 
-
-
-def test_single_nii_eval(nii_fname, label, net, patch_size=[256, 256], output_fname='prediction.nii.gz'):
-
-    image = load_img(nii_fname).get_fdata()
-
-    if len(image.shape) == 3:
-        prediction = np.zeros_like(image)
-        for ind in tqdm(range(image.shape[2])):
-            slice = image[:, :, ind]
-            slice = 255.0*slice/np.max(slice)
-            x, y = slice.shape[0], slice.shape[1]
-            if x != patch_size[0] or y != patch_size[1]:
-                # previous using 0
-                slice = zoom(
-                    slice, (patch_size[0] / x, patch_size[1] / y), order=3)
-            input = torch.from_numpy(slice).unsqueeze(
-                0).unsqueeze(0).float()#.cuda()
-            net.eval()
-            with torch.no_grad():
-                outputs = net(input)
-                out = torch.argmax(torch.softmax(
-                    outputs, dim=1), dim=1).squeeze(0)
-                out = out.cpu().detach().numpy()
-                if x != patch_size[0] or y != patch_size[1]:
-                    pred = zoom(
-                        out, (x / patch_size[0], y / patch_size[1]), order=0)
-                else:
-                    pred = out
-                prediction[:,:,ind] = pred
-    else:
-        input = torch.from_numpy(image).unsqueeze(
-            0).unsqueeze(0).float() #.cuda()
-        net.eval()
-        with torch.no_grad():
-            out = torch.argmax(torch.softmax(
-                net(input), dim=1), dim=1).squeeze(0)
-            prediction = out.cpu().detach().numpy()
-
-    metric_list = []
-    for i in range(1, classes):
-        metric_list.append(calculate_metric_percase(
-            prediction == i, label == i))
-
-    v = new_img_like(nii_fname,np.uint16(prediction))
-    v.to_filename(output_fname)
-
-    return metric_list
