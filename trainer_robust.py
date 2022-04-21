@@ -90,7 +90,9 @@ def trainer_synapse(args, model, snapshot_path):
             
             class_weights = None
             if args.class_weight is not None:
-                class_weights = 1 - torch.unique(labs, return_counts=True)[1] / (labs.shape[0]*labs.shape[1]*labs.shape[2])
+                labs_onehot = torch.nn.functional.one_hot(torch.squeeze(labs), args.num_classes).float()
+                tmp = labs_onehot.permute((0, 2, 3, 1))
+                class_weights = 1 - (torch.sum(tmp.reshape((-1, 9)), axis=0) / (labs.shape[0]*labs.shape[1]*labs.shape[2]))
                 
             # if class_weights.size(0) < 9:
             #     pdb.set_trace()
