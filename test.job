@@ -12,4 +12,4 @@ module purge
 module load nvidia-hpc-sdk
 module load gcc/8.3.0
 
-python /scratch1/wenhuicu/brainseg/test_args.py --loss='BCE' --beta='0.0001' --warmup=2
+python /scratch1/wenhuicu/brainseg/test_args.py --loss='BCE' --beta='0.0001' --warmup=2 --suffix=weighted_BCE

@@ -12,4 +12,4 @@ module purge
 module load nvidia-hpc-sdk
 module load gcc/8.3.0
 
-python /scratch1/wenhuicu/brainseg/train_robust.py --loss='BCE' --beta=0.0001 --warmup=2 --class_weight=1 --suffix='weighted'
+python /scratch1/wenhuicu/brainseg/train_robust.py --loss='BCE' --beta=0.0001 --warmup=2 --class_weight=1 --suffix='_weighted_BCE'

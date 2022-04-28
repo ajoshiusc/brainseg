@@ -5,11 +5,11 @@
 #SBATCH --mem=64GB
 #SBATCH --time=1:00:00
 #SBATCH --partition=gpu
-#SBATCH --gres=gpu:1
+#SBATCH --gres=gpu:p100:1
 #SBATCH --account=ajoshi_27
 
 module purge
 module load nvidia-hpc-sdk
 module load gcc/8.3.0
 
-python /scratch1/wenhuicu/brainseg/evaluation.py --name='BCE0.0001weighted_BCE2'
+python /scratch1/wenhuicu/brainseg/test_nii.py
