@@ -52,11 +52,11 @@ if __name__ == "__main__":
     vit_patches_size = 16    
     #snapshot = '/project/ajoshi_27/code_farm/brainseg/model/T1_SkullScalp_t1256/TU_R50-ViT-B_16_skip3_30k_epo150_bs16_256/epoch_10.pth'
     #snapshot = '/project/ajoshi_27/code_farm/brainseg/model/T1T2_SkullScalp_t1t2256/TU_R50-ViT-B_16_skip3_30k_epo150_bs16_256/epoch_10.pth' #os.path.join(snapshot_path, 'best_model.pth')
-    snapshot = '/home/ajoshi/projects/brainseg/model/T1_SkullScalp_t2256/TU_R50-ViT-B_16_skip3_30k_epo150_bs4_256/epoch_2.pth'
+    snapshot = '/home/ajoshi/projects/brainseg/model/T1_SkullScalp_t2256/TU_R50-ViT-B_16_skip3_30k_epo150_bs4_256/epoch_23.pth'
     # snapshot = '/home1/ajoshi/epoch_10.pth'
 
-    input_nii = '/deneb_disk/feta_2022/test/sub-045/anat/sub-045_rec-irtk_T2w.nii.gz'
-    output_file = '/deneb_disk/feta_2022/test/sub-045/anat/sub-045_rec-irtk.label.nii.gz'
+    input_nii = '/deneb_disk/feta_2022/test/sub-026/anat/sub-026_rec-mial_T2w.nii.gz'
+    output_file = '/deneb_disk/feta_2022/test/sub-026/anat/sub-026_rec-mial_T2w.label.nii.gz'
 
     cudnn.benchmark = True
     cudnn.deterministic = False
