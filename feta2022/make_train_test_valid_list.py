@@ -11,23 +11,28 @@ data_dir = '/deneb_disk/feta_2022/feta_2.2'
 sub_dirs = glob.glob(data_dir + '/sub*')
 
 num_sub = 0
-sub_lst = []
+subbase_lst = []
 
 for subdir in sub_dirs:
     # Create a list of files
-    subname = os.path.basename(subdir)[4:]
-    t1 = os.path.join(subdir, 'T1fs_conform.nii.gz')
-    t2 = os.path.join(subdir, 'T2_conform.nii.gz')
-    seg = os.path.join(subdir, subname + '_masks_contr.nii.gz')
-    t1only = os.path.join(headreco_t1_dir,'m2m_' + subname, 'T1fs_conform.nii.gz')
-    seg_t1only = os.path.join(headreco_t1_dir,'m2m_' + subname, subname + '_masks_contr.nii.gz')
+    sub = os.path.basename(subdir)
+    t2_irtk = os.path.join(subdir, 'anat', sub+'_rec-irtk_T2w.nii.gz')
+    seg_irtk = os.path.join(subdir, 'anat', sub+'_rec-irtk_dseg.nii.gz')
+    t2_mial = os.path.join(subdir, 'anat', sub+'_rec-mial_T2w.nii.gz')
+    seg_mial = os.path.join(subdir, 'anat', sub+'_rec-mial_dseg.nii.gz')
 
-    if os.path.exists(t1) and os.path.exists(t2) and os.path.exists(seg) and os.path.exists(t1only) and os.path.exists(seg_t1only):
-        print('All needed files exist for subject: ' + subname)
-        sub_lst.append(subname)
+    if os.path.exists(t2_irtk) and os.path.exists(seg_irtk):
+        print('All needed files exist for subject: ' + sub)
+        subbase_lst.append(os.path.join(subdir, 'anat', sub+'_rec-irtk'))
+    elif os.path.exists(t2_mial) and os.path.exists(seg_mial):
+        print('All needed files exist for subject: ' + sub)
+        subbase_lst.append(os.path.join(subdir, 'anat', sub+'_rec-mial'))    
+    else:
+
+        print('Skipping!! All needed files fo not exist for subject: '+ sub)
 
 
-num_sub = len(sub_lst)
+num_sub = len(subbase_lst)
 
 print(num_sub)
 
@@ -38,9 +43,9 @@ num_test = np.uint16(np.round(num_sub*.2))
 num_valid = num_sub - num_test - num_train
 
 
-sub_train = sub_lst[:num_train]
-sub_test = sub_lst[num_train:num_train+num_test]
-sub_valid = sub_lst[num_train+num_test:]
+sub_train = subbase_lst[:num_train]
+sub_test = subbase_lst[num_train:num_train+num_test]
+sub_valid = subbase_lst[num_train+num_test:]
 
 
 with open("train.txt", "w") as outfile:
