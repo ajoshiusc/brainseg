@@ -12,15 +12,15 @@ from trainer import trainer_synapse
 parser = argparse.ArgumentParser()
 
 parser.add_argument('--dataset', type=str,
-                    default='SkullScalp_t1', help='experiment_name')
+                    default='SkullScalp_t2', help='experiment_name')
 parser.add_argument('--num_classes', type=int,
-                    default=9, help='output channel of network')
+                    default=8, help='output channel of network')
 parser.add_argument('--max_iterations', type=int,
                     default=300, help='maximum epoch number to train')
 parser.add_argument('--max_epochs', type=int,
                     default=150, help='maximum epoch number to train')
 parser.add_argument('--batch_size', type=int,
-                    default=16, help='batch_size per gpu')
+                    default=4, help='batch_size per gpu')
 parser.add_argument('--n_gpu', type=int, default=1, help='total gpu')
 parser.add_argument('--deterministic', type=int,  default=1,
                     help='whether use deterministic training')
@@ -53,9 +53,9 @@ if __name__ == "__main__":
     torch.cuda.manual_seed(args.seed)
     dataset_name = args.dataset
     dataset_config = {
-        'SkullScalp_t1': {
-            'root_path': 'train_t1.h5',
-            'num_classes': 9,
+        'SkullScalp_t2': {
+            'root_path': 'train_t2.h5',
+            'num_classes': 8,
         },
     }
     args.num_classes = dataset_config[dataset_name]['num_classes']
@@ -85,5 +85,5 @@ if __name__ == "__main__":
     
     #net.load_from(weights=np.load(config_vit.pretrained_path))
 
-    trainer = {'SkullScalp_t1': trainer_synapse,}
+    trainer = {'SkullScalp_t2': trainer_synapse,}
     trainer[dataset_name](args, net, snapshot_path)

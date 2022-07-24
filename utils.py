@@ -127,7 +127,7 @@ def test_single_nii(nii_fname, net, patch_size=[256, 256], output_fname='predict
         prediction = np.zeros_like(image)
         for ind in tqdm(range(image.shape[2])):
             slice = image[:, :, ind]
-            slice = 255.0*slice/np.max(slice)
+          #  slice = 255.0*slice/np.max(slice)
             x, y = slice.shape[0], slice.shape[1]
             if x != patch_size[0] or y != patch_size[1]:
                 # previous using 0

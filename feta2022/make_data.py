@@ -6,9 +6,9 @@ import h5py
 import numpy as np
 import os
 
-headreco_dir = '/project/ajoshi_27/headreco_out/'
-mode = 'valid'
-out_h5file = mode+'_t1t2.h5'
+fetadata_dir = '/deneb_disk/feta_2022/feta_2.2/'
+mode = 'test'
+out_h5file = mode+'_t2.h5'
 
 # Read the list of subjects
 with open(mode+'.txt', 'r') as myfile:
@@ -21,9 +21,8 @@ Y = list()
 for subname in tqdm(sub_lst):
 
     # Create file names
-    subdir = os.path.join(headreco_dir, 'm2m_'+subname)
-    mr = os.path.join(subdir, 'T1fs_conform.nii.gz')
-    lab = os.path.join(subdir, subname + '_masks_contr.nii.gz')
+    mr = subname + '_T2w.nii.gz'
+    lab = subname + '_dseg.nii.gz'
 
     mr_data = ni.load_img(mr).get_fdata()
     lab_data = ni.load_img(lab).get_fdata()
@@ -35,7 +34,7 @@ for subname in tqdm(sub_lst):
                       mr_data.shape[0], patch_size[1]/mr_data.shape[1]), order=0)
         slice[slice < 0] = 0
 
-        if np.max(np.uint8(labels))>8 or np.min(np.uint8(labels))<0:
+        if np.max(np.uint8(labels))>7 or np.min(np.uint8(labels))<0:
             print('Bad Label, skipping')
             continue
 
