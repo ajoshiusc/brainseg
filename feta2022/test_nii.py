@@ -55,8 +55,10 @@ if __name__ == "__main__":
     snapshot = '/home/ajoshi/projects/brainseg/model/T1_SkullScalp_t2256/TU_R50-ViT-B_16_skip3_30k_epo150_bs4_256/epoch_23.pth'
     # snapshot = '/home1/ajoshi/epoch_10.pth'
 
-    input_nii = '/deneb_disk/feta_2022/test/sub-026/anat/sub-026_rec-mial_T2w.nii.gz'
-    output_file = '/deneb_disk/feta_2022/test/sub-026/anat/sub-026_rec-mial_T2w.label.nii.gz'
+    #input_nii = '/deneb_disk/feta_2022/test/sub-026/anat/sub-026_rec-mial_T2w.nii.gz'
+    #output_file = '/deneb_disk/feta_2022/test/sub-026/anat/sub-026_rec-mial_T2w.label.nii.gz'
+    input_nii = '/deneb_disk/feta_2022/test/lowfield/outSVR2_fixed_reorient.nii.gz'
+    output_file = '/deneb_disk/feta_2022/test/lowfield/outSVR2_fixed_reorient.label.nii.gz'
 
     cudnn.benchmark = True
     cudnn.deterministic = False
