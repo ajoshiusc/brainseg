@@ -7,7 +7,7 @@ import numpy as np
 import os
 import random
 
-data_dir = '/deneb_disk/feta_2022/feta_2.2'
+data_dir = '/project/ajoshi_27/feta_2022/feta_2.2'
 
 sub_dirs = glob.glob(data_dir + '/sub*')
 
