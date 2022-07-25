@@ -5,6 +5,7 @@ from scipy.ndimage import zoom
 import h5py
 import numpy as np
 import os
+import random
 
 data_dir = '/deneb_disk/feta_2022/feta_2.2'
 
@@ -31,14 +32,16 @@ for subdir in sub_dirs:
 
         print('Skipping!! All needed files fo not exist for subject: '+ sub)
 
+random.seed(1231)
+random.shuffle(subbase_lst)
 
 num_sub = len(subbase_lst)
 
 print(num_sub)
 
-num_train = np.uint16(np.round(num_sub*.7))
+num_train = np.uint16(np.round(num_sub*.9))
 
-num_test = np.uint16(np.round(num_sub*.2))
+num_test = np.uint16(np.round(num_sub*.05))
 
 num_valid = num_sub - num_test - num_train
 
