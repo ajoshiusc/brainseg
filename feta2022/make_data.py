@@ -6,8 +6,8 @@ import h5py
 import numpy as np
 import os
 
-fetadata_dir = '/deneb_disk/feta_2022/feta_2.2/'
-mode = 'test'
+fetadata_dir = '/project/ajoshi_27/feta_2022/feta_2.2/'
+mode = 'valid'
 out_h5file = mode+'_t2.h5'
 
 # Read the list of subjects
