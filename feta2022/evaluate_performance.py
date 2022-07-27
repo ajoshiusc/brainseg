@@ -16,6 +16,9 @@ import SimpleITK as sitk
 from data_reader import H5DataLoader
 import h5py
 import uuid
+import xml.etree.ElementTree as ET
+
+
 
 
 
@@ -41,6 +44,27 @@ def inference(input_nii, model, output_fname=None, do_bfc=True):
 
 
 
+def read_perf_xml(xmlfile):
+    # Read XML for brain atlas
+    xml_root = ET.parse(xmlfile).getroot()
+
+    names = list()
+    ids = list()
+
+
+    for i in range(len(xml_root[2])):
+        names.append(xml_root[2][i].get('symbol'))
+        ids.append(np.float32(xml_root[2][i].get('value')))
+
+    mydict = {names[i]: ids[i]
+                for i in range(len(names))}
+
+    return mydict
+
+
+
+
+
 if __name__ == "__main__":
 
     seed = 1234
@@ -56,7 +80,9 @@ if __name__ == "__main__":
     # snapshot = '/home1/ajoshi/epoch_10.pth'
 
     input_nii = '/deneb_disk/feta_2022/test/sub-026/anat/sub-026_rec-mial_T2w.nii.gz'
-    output_file = '/deneb_disk/feta_2022/test/sub-026/anat/sub-026_rec-mial_T2w66.label.nii.gz'
+    output_file = 'myfile.nii.gz'
+    ground_truth = '/deneb_disk/feta_2022/test/sub-026/anat/sub-026_rec-mial_dseg.nii.gz'
+    xmlfile = 'out2.xml'
     #input_nii = '/deneb_disk/feta_2022/test/lowfield/outSVR2_fixed_reorient.nii.gz'
     #output_file = '/deneb_disk/feta_2022/test/lowfield/outSVR2_fixed_reorient.label.nii.gz'
 
@@ -66,9 +92,6 @@ if __name__ == "__main__":
     np.random.seed(seed)
     torch.manual_seed(seed)
     #torch.cuda.manual_seed(args.seed)
-
-
-
 
     config_vit = CONFIGS_ViT_seg[vit_name]
     config_vit.n_classes = num_classes
@@ -83,6 +106,15 @@ if __name__ == "__main__":
 
 
     inference(input_nii, net, output_fname=output_file, do_bfc=False)
+
+
+    cmd = '/home/ajoshi/webware/EvaluateSegmentation-2020.08.28-Ubuntu/EvaluateSegmentation '+ ground_truth + ' ' + output_file + ' -xml ' + xmlfile
+
+    os.system(cmd)
+
+    a = read_perf_xml(xmlfile)
+
+    print(a)
 
 
 
