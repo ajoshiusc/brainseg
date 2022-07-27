@@ -18,7 +18,7 @@ import h5py
 import uuid
 import xml.etree.ElementTree as ET
 
-
+import pandas as pd
 
 
 
@@ -79,10 +79,15 @@ if __name__ == "__main__":
     snapshot = '/home/ajoshi/epoch_66.pth'
     # snapshot = '/home1/ajoshi/epoch_10.pth'
 
+
+
+
+
     input_nii = '/deneb_disk/feta_2022/test/sub-026/anat/sub-026_rec-mial_T2w.nii.gz'
     output_file = 'myfile.nii.gz'
     ground_truth = '/deneb_disk/feta_2022/test/sub-026/anat/sub-026_rec-mial_dseg.nii.gz'
     xmlfile = 'out2.xml'
+
     #input_nii = '/deneb_disk/feta_2022/test/lowfield/outSVR2_fixed_reorient.nii.gz'
     #output_file = '/deneb_disk/feta_2022/test/lowfield/outSVR2_fixed_reorient.label.nii.gz'
 
@@ -101,19 +106,18 @@ if __name__ == "__main__":
         config_vit.patches.grid = (int(img_size/vit_patches_size), int(img_size/vit_patches_size))
     net = ViT_seg(config_vit, img_size=img_size, num_classes=config_vit.n_classes).cuda()
 
-
     net.load_state_dict(torch.load(snapshot,map_location=torch.device('cuda')))
 
-
     inference(input_nii, net, output_fname=output_file, do_bfc=False)
-
 
     cmd = '/home/ajoshi/webware/EvaluateSegmentation-2020.08.28-Ubuntu/EvaluateSegmentation '+ ground_truth + ' ' + output_file + ' -xml ' + xmlfile
 
     os.system(cmd)
 
-    a = read_perf_xml(xmlfile)
+    a1 = read_perf_xml(xmlfile)
+    a2 = read_perf_xml(xmlfile)
 
+    a = pd.DataFrame([a1,a2])
     print(a)
 
 
