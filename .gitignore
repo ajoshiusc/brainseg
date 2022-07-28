@@ -9,6 +9,7 @@ valid.txt
 log.txt
 TU_pretrain*
 launch.json*
+test_eval*.csv
 
 # Byte-compiled / optimized / DLL files
 __pycache__/
