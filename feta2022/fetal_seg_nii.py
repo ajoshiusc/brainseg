@@ -13,8 +13,8 @@ from utils import test_single_nii
 from networks.vit_seg_modeling import VisionTransformer as ViT_seg
 from networks.vit_seg_modeling import CONFIGS as CONFIGS_ViT_seg
 import SimpleITK as sitk
-import h5py
 import uuid
+import glob
 
 
 def inference(input_nii, model, output_fname=None, do_bfc=True, device='cpu'):
@@ -40,7 +40,16 @@ def inference(input_nii, model, output_fname=None, do_bfc=True, device='cpu'):
 
 if __name__ == "__main__":
 
-    device = 'cuda'
+
+    input_img_dir = '/input_img'
+    input_meta_dir = '/input_meta'
+    outputDir = '/output'
+
+    T2wImagePath = glob.glob(os.path.join(input_img_dir, 'anat', '*_T2w.nii.gz'))[0]
+    sub = os.path.split(T2wImagePath)[1].split('_')[0] # to split the input directory and to obtain the suject name
+
+
+    device = 'cpu'
 
     seed = 1234
     vit_name = 'R50-ViT-B_16'
@@ -51,11 +60,11 @@ if __name__ == "__main__":
     vit_patches_size = 16
     #snapshot = '/project/ajoshi_27/code_farm/brainseg/model/T1_SkullScalp_t1256/TU_R50-ViT-B_16_skip3_30k_epo150_bs16_256/epoch_10.pth'
     # snapshot = '/project/ajoshi_27/code_farm/brainseg/model/T1T2_SkullScalp_t1t2256/TU_R50-ViT-B_16_skip3_30k_epo150_bs16_256/epoch_10.pth' #os.path.join(snapshot_path, 'best_model.pth')
-    snapshot = '/home/ajoshi/projects/brainseg/trained_model/epoch_66.pth'
+    snapshot = '/trained_model/epoch_66.pth'
     # snapshot = '/home1/ajoshi/epoch_10.pth'
 
-    input_nii = '/deneb_disk/feta_2022/test/sub-058/anat/sub-058_rec-irtk_T2w.nii.gz'
-    output_file = '/deneb_disk/feta_2022/test/sub-058/anat/sub-058_rec-irtk_T2w66.label.nii.gz'
+    input_nii = T2wImagePath #'/deneb_disk/feta_2022/test/sub-026/anat/sub-026_rec-mial_T2w.nii.gz'
+    output_file = os.path.join(outputDir, sub + '_seg_result.nii.gz') #'/deneb_disk/feta_2022/test/sub-026/anat/sub-026_rec-mial_T2w66.label.nii.gz'
     #input_nii = '/deneb_disk/feta_2022/test/lowfield/outSVR2_fixed_reorient.nii.gz'
     #output_file = '/deneb_disk/feta_2022/test/lowfield/outSVR2_fixed_reorient.label.nii.gz'
 
@@ -81,3 +90,6 @@ if __name__ == "__main__":
 
     inference(input_nii, net, output_fname=output_file,
               do_bfc=False, device=device)
+
+    print('Segmentation done for ' + input_nii)
+    print('The output is saved in ' + output_file)
