@@ -10,7 +10,7 @@ import torch.backends.cudnn as cudnn
 import torch.nn as nn
 from torch.utils.data import DataLoader
 from tqdm import tqdm
-from utils import test_images, test_single_nii
+from utils import test_single_nii
 from networks.vit_seg_modeling import VisionTransformer as ViT_seg
 from networks.vit_seg_modeling import CONFIGS as CONFIGS_ViT_seg
 import SimpleITK as sitk
@@ -83,7 +83,7 @@ def eval_model(snapshot):
         sub = os.path.basename(os.path.dirname(anat))
 
         input_nii = subbase + '_T2w.nii.gz'
-        output_file = 'myfilehfsjf.nii.gz'
+        output_file = 'temp.auto.label.nii.gz'
         ground_truth = subbase + '_dseg.nii.gz'
         xmlfile = 'out2hfslfj.xml'
 
@@ -111,10 +111,10 @@ def eval_model(snapshot):
             config_vit.patches.grid = (
                 int(img_size/vit_patches_size), int(img_size/vit_patches_size))
         net = ViT_seg(config_vit, img_size=img_size,
-                      num_classes=config_vit.n_classes).cuda()
+                      num_classes=config_vit.n_classes).cpu()
 
         net.load_state_dict(torch.load(
-            snapshot, map_location=torch.device('cuda')))
+            snapshot, map_location=torch.device('cpu')))
 
         inference(input_nii, net, output_fname=output_file, do_bfc=False)
 
@@ -140,7 +140,7 @@ if __name__ == "__main__":
     # snapshot = '/project/ajoshi_27/code_farm/brainseg/model/T1T2_SkullScalp_t1t2256/TU_R50-ViT-B_16_skip3_30k_epo150_bs16_256/epoch_10.pth' #os.path.join(snapshot_path, 'best_model.pth')
     epoch_mean = list()
     epoch_var = list()
-    for j in range(67):
+    for j in [66]:  # range(67):
         snapshot = '/home/ajoshi/TU_R50-ViT-B_16_skip3_30k_epo150_bs4_256/epoch_' + \
             str(j) + '.pth'
 
@@ -160,4 +160,3 @@ if __name__ == "__main__":
 
     epoch_mean.to_csv('epoch_mean.csv')
     epoch_var.to_csv('epoch_var.csv')
-
