@@ -154,10 +154,11 @@ if __name__ == "__main__":
 
     #snapshot = '/project/ajoshi_27/code_farm/brainseg/model/T1_SkullScalp_t1256/TU_R50-ViT-B_16_skip3_30k_epo150_bs16_256/epoch_10.pth'
     # snapshot = '/project/ajoshi_27/code_farm/brainseg/model/T1T2_SkullScalp_t1t2256/TU_R50-ViT-B_16_skip3_30k_epo150_bs16_256/epoch_10.pth' #os.path.join(snapshot_path, 'best_model.pth')
-    epoch_mean = list()
-    epoch_var = list()
 
-    for roi_id in [1,2,3,4,5,6,7]:
+
+    for roi_id in [2,3,4,5,6,7]:
+        epoch_mean = list()
+        epoch_var = list()
         for j in [66]:  # range(67):
             snapshot = '/home/ajoshi/TU_R50-ViT-B_16_skip3_30k_epo150_bs4_256/epoch_' + \
                 str(j) + '.pth'
