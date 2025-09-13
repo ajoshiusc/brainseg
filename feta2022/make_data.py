@@ -6,7 +6,7 @@ import h5py
 import numpy as np
 import os
 
-fetadata_dir = '/project/ajoshi_27/feta_2022/feta_2.2/'
+#fetadata_dir = '/project/ajoshi_27/feta_2022/feta_2.2/'
 mode = 'valid'
 out_h5file = mode+'_t2.h5'
 
